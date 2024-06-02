@@ -1,5 +1,4 @@
-// ignore_for_file: prefer_const_constructors
-
+import 'package:eduguard/src/common_widgets/Screens/appbar.dart';
 import 'package:flutter/material.dart';
 
 class SOSHome extends StatefulWidget {
@@ -12,8 +11,19 @@ class SOSHome extends StatefulWidget {
 class _SOSHomeState extends State<SOSHome> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
-      body: Text('Emergency SOS System', style: TextStyle(fontSize: 20.0),),
+    return  const Scaffold(
+
+      //Custom Appbar
+      appBar: CustomAppBar(
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Hello, Matteo Perera...', style: TextStyle(fontSize: 14.0, color:Colors.grey),),
+            Text('Emergency SOS System.', style: TextStyle(fontSize: 16.0),)
+          ],
+        ),
+      ),
+
     );
   }
 }
