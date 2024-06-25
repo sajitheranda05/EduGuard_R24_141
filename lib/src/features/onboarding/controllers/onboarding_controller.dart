@@ -1,5 +1,4 @@
-
-import 'package:eduguard/bottom_navigation.dart';
+import 'package:eduguard/layout.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,7 +21,7 @@ class OnboardingController extends GetxController {
   //Update current index & jump to next page
   void nextPage() {
     if (currentPageIndex.value == 4) {
-      Get.to(() => const BottomNavigationMenu());
+      Get.to(() => const Layout());
     }else{
       int page =currentPageIndex.value + 1;
       pageController.jumpToPage(page);
@@ -31,8 +30,7 @@ class OnboardingController extends GetxController {
 
   //Update the current index and & jump to the last page
   void skipPage() {
-    currentPageIndex.value =4;
-    pageController.jumpToPage(4);
+    Get.to(() => const Layout());
   }
 
 }
