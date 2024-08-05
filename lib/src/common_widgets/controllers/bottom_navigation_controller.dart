@@ -6,7 +6,7 @@ class NavigationController extends GetxController {
   final Rx<int> selectedIndex =0.obs;
 
   final screens = [
-    const SOSHome(),
+    const SOSHomePage(),
     //const TestPage(),
     //const MainScreen(),
     (Container(color: Colors.orange,)),

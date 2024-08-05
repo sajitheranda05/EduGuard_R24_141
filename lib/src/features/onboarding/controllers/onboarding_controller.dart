@@ -1,4 +1,5 @@
 import 'package:eduguard/layout.dart';
+import 'package:eduguard/src/features/authentication/user/login/screens/login_select.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -30,7 +31,8 @@ class OnboardingController extends GetxController {
 
   //Update the current index and & jump to the last page
   void skipPage() {
-    Get.to(() => const Layout());
+    //Get.to(() => const Layout());
+    Get.to(() => const LoginSelectScreen());
   }
 
 }

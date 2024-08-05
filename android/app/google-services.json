@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1061351845450",
+    "project_id": "eduguard-r24-141",
+    "storage_bucket": "eduguard-r24-141.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1061351845450:android:8e05254961e74ca92bc0b3",
+        "android_client_info": {
+          "package_name": "com.example.eduguard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA0tR0bvMTTQQqkSPXqQydL9iaXCKR96Dc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
