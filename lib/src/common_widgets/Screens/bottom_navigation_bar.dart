@@ -21,7 +21,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           NavigationDestination(icon: Icon(Icons.home_rounded), label: 'Home'),
           NavigationDestination(icon: Icon(Icons.school_rounded), label: 'Education'),
           NavigationDestination(icon: Icon(Icons.article_rounded), label: 'Blogs'),
-          NavigationDestination(icon: Icon(Icons.quiz_rounded), label: 'Questionnare'),
+          NavigationDestination(icon: Icon(Icons.quiz_rounded), label: 'Quiz'),
           NavigationDestination(icon: Icon(Icons.medical_information_rounded), label: 'Health'),
         ],
       ),
