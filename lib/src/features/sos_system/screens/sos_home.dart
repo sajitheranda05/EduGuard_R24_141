@@ -1,5 +1,7 @@
 import 'package:eduguard/src/common_widgets/Screens/appbar.dart';
 import 'package:eduguard/src/common_widgets/Screens/tabbar.dart';
+import 'package:eduguard/src/features/sos_system/screens/sos_state.dart';
+import 'package:eduguard/src/features/sos_system/screens/sos_tab_section.dart';
 import 'package:flutter/material.dart';
 
 class SOSHomePage extends StatefulWidget {
@@ -42,7 +44,7 @@ class _SOSHomePageState extends State<SOSHomePage> {
                   child: TabBarView(
                     children: [
                       Center(
-                        child: Text('Content for SOS system'),
+                        child: SOSTabScreen(),
                       ),
                       Center(
                         child: Text('Content for Chat system'),
