@@ -59,6 +59,21 @@ class UserRepository extends GetxController {
     }
   }
 
+  // //Save Contact details
+  // Future<void> updateEmergencyContactDetails(ContactDetailsModel contacts) async {
+  //   try {
+  //     await _db.collection('Users').doc(AuthenticationRepository.instance.authUser?.uid).set(contacts.toJSON());
+  //   }on FirebaseException catch (e) {
+  //     throw('Firebase Exception : $e');
+  //   }on FormatException catch (e) {
+  //     throw('Format Exception : $e');
+  //   }on PlatformException catch (e) {
+  //     throw('Platform Exception : $e');
+  //   }catch (e){
+  //     throw 'Something went wrong, Please try again';
+  //   }
+  // }
+
   //update a single field
   Future<void> updateSingleField(Map<String,dynamic> json) async {
     try {

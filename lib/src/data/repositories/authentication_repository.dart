@@ -9,6 +9,8 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../features/authentication/user/login/screens/login_select.dart';
+
 class AuthenticationRepository extends GetxController {
   static AuthenticationRepository get  instance => Get.find();
 
@@ -114,7 +116,7 @@ class AuthenticationRepository extends GetxController {
   Future<void> logout() async {
     try {
       await FirebaseAuth.instance.signOut();
-      Get.offAll(() => const UserLogin());
+      Get.offAll(() => const LoginSelectScreen());
     }on FirebaseAuthException catch (e){
       throw('Firebase auth Exception : $e');
     }on FirebaseException catch (e) {

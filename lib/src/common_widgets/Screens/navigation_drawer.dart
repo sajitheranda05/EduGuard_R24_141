@@ -25,7 +25,7 @@ class CustomNavigationDrawer extends StatelessWidget {
               width: 48,
               height: 48,
             ),
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.black,
             ),
             onDetailsPressed: () {

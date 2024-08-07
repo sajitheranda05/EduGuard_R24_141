@@ -1,6 +1,7 @@
 import 'package:eduguard/firebase_options.dart';
 import 'package:eduguard/src/bindings/general_bindings.dart';
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
+import 'package:eduguard/src/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -34,9 +35,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "EduguardLK",
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-      ),
+      theme: AppTheme.themeData,
       initialBinding: GeneralBindings(),
       home: const Scaffold(
         backgroundColor: Colors.greenAccent,

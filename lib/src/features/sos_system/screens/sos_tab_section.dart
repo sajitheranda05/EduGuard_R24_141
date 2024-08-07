@@ -27,7 +27,7 @@ class SOSTabScreen extends StatelessWidget {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
                   shape: const CircleBorder(),
-                  padding: const EdgeInsets.all(96.0),
+                  padding: const EdgeInsets.all(72.0),
                 ),
                 child: const Icon(Icons.sos_outlined, size: 64.0, color: Colors.white,),
               ),
