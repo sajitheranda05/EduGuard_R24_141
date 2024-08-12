@@ -13,20 +13,26 @@ class ChangeName extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(
         showBackArrow: true,
-        title: Text('Change Name',style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold,),),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Use real name for easy verification. This name will appear on several pages.',
-              style: TextStyle(
-                fontSize: 14,
-                color: Colors.grey[500],
-              ),
+
+            const Text(
+              'Change Name',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24.0),
             ),
-            const SizedBox(height: 24.0),
+            const SizedBox(height: 2.0,),
+            Text(
+              'Use real name for easy verification. This name will appear on several pages.',
+              style: TextStyle(color: Colors.grey[600], fontSize: 14.0),
+            ),
+            const Divider(),
+
+            const SizedBox(height: 24.0,),
+
 
             Form(
                 key: updateNameController.updateNameFormKey,
@@ -40,6 +46,7 @@ class ChangeName extends StatelessWidget {
                         labelText: 'First Name',
                       ),
                     ),
+                    const SizedBox(height: 24.0),
                     TextFormField(
                       controller: updateNameController.lastName,
                       validator: (value) => AppValidations.validateEmptyText('Last name', value),

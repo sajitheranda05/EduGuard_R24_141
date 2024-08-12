@@ -24,6 +24,7 @@ class CustomCircularImage extends StatelessWidget {
         width: width,
         height: height,
         padding: EdgeInsets.all(padding),
+        margin: const EdgeInsets.only(bottom: 2.0),
         decoration: BoxDecoration(
         color: backgroundColor ?? Colors.greenAccent,
         borderRadius: BorderRadius.circular(100),

@@ -18,8 +18,18 @@ class CustomNavigationDrawer extends StatelessWidget {
         padding: EdgeInsets.zero,
         children:[
           UserAccountsDrawerHeader(
-            accountName: Text(userController.user.value.fullName),
-            accountEmail: Text(userController.user.value.email),
+            accountName: Text(
+                userController.user.value.fullName,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w400,
+                ),
+            ),
+            accountEmail: Text(
+              userController.user.value.email,
+              style: const TextStyle(
+                fontWeight: FontWeight.w300,
+              ),
+            ),
             currentAccountPicture: const CustomCircularImage(
               image: AppImages.userImage,
               width: 48,
