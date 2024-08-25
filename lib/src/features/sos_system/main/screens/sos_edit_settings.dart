@@ -1,8 +1,9 @@
 import 'package:eduguard/src/common_widgets/Screens/appbar.dart';
-import 'package:eduguard/src/features/sos_system/controllers/sos_edit_settings_controller.dart';
 import 'package:eduguard/src/utils/validators/validations.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../controllers/sos_edit_settings_controller.dart';
 
 class SOSEditSettings extends StatelessWidget {
   const SOSEditSettings({super.key});

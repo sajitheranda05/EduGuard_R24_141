@@ -1,5 +1,5 @@
-import 'package:eduguard/src/features/sos_system/controllers/sos_edit_settings_controller.dart';
 import 'package:eduguard/src/features/sos_system/contacts/models/user_search_model.dart';
+import 'package:eduguard/src/features/sos_system/main/controllers/sos_edit_settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

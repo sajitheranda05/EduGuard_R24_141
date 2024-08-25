@@ -2,18 +2,19 @@ import 'package:eduguard/src/common_widgets/Screens/appbar.dart';
 import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
 import 'package:eduguard/src/features/sos_system/contacts/models/contacts_model.dart';
 import 'package:eduguard/src/features/sos_system/contacts/screens/sos_edit_contacts.dart';
-import 'package:eduguard/src/features/sos_system/screens/sos_edit_settings.dart';
 import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_title_card.dart';
-import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_display_contact.dart'; // Ensure this path is correct
+import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_display_contact.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../main/screens/sos_edit_settings.dart';
 
 class SOSSettings extends StatelessWidget {
   const SOSSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final contactsController =Get.put(ContactsController()); // Use Get.find() instead of Get.put() if it's already initialized
+    final contactsController =Get.put(ContactsController());
 
     return Scaffold(
       appBar: const CustomAppBar(
@@ -24,7 +25,6 @@ class SOSSettings extends StatelessWidget {
         child: Column(
           children: [
             Obx(() {
-              // Ensure that fetchedContacts is populated
               final highPriorityContact = contactsController.fetchedContacts.firstWhere(
                     (contact) => contact.priority == 'high',
                 orElse: () => ContactsModel.empty(),

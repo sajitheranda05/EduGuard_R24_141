@@ -1,9 +1,5 @@
 import 'package:eduguard/src/common_widgets/Screens/circular_image.dart';
-import 'package:eduguard/src/features/sos_system/controllers/sos_edit_settings_controller.dart';
-import 'package:eduguard/src/utils/constants/image_strings.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class CustomSOSUSerImageSection extends StatelessWidget {
   const CustomSOSUSerImageSection({

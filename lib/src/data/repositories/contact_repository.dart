@@ -66,16 +66,22 @@ class ContactRepository extends GetxController {
         await doc.reference.delete();
       }
 
-      // Add the new contacts, ensuring only four are added
+      // Add the new contacts using their email as the document ID
       for (var contact in contacts) {
         if (contact['email'] != null && contact['email']!.isNotEmpty) {
-          await userDocRef.collection('Contacts').add({
-            'email': contact['email'],
-            'name': contact['name'],
-            'number': contact['number'],
-            'priority': contact['priority'],
-            // Add any other fields you need
-          });
+          final userSnapshot = await searchExactUserByEmail(contact['email']!);
+
+          if (userSnapshot.docs.isNotEmpty) {
+            // Assuming the first match is the correct user
+            final userId = userSnapshot.docs.first.id;
+
+            await userDocRef.collection('Contacts').doc(userId).set({
+              'email': contact['email'],
+              'name': contact['name'],
+              'number': contact['number'],
+              'priority': contact['priority'],
+            });
+          }
         }
       }
 
@@ -96,6 +102,13 @@ class ContactRepository extends GetxController {
         .collection('Users')
         .where('Email', isGreaterThanOrEqualTo: query)
         .where('Email', isLessThanOrEqualTo: query + '\uf8ff')
+        .get();
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> searchExactUserByEmail(String query) async {
+    return _db
+        .collection('Users')
+        .where('Email', isEqualTo: query)
         .get();
   }
 

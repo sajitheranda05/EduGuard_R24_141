@@ -51,6 +51,11 @@ class ContactsController extends GetxController {
     initializeContacts();
   }
 
+  String getFirstName(String fullName) {
+    List<String> parts = fullName.split(' ');
+    return parts.isNotEmpty ? parts[0] : '';
+  }
+
   // Method to initialize contact fields
   Future<void> initializeContacts() async {
 
@@ -95,8 +100,6 @@ class ContactsController extends GetxController {
       print('Error fetching contacts: $e');
     }
   }
-
-
 
   //Save contact settings
   void saveContactSettings() async{
