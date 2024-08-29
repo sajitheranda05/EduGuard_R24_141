@@ -7,9 +7,10 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
-void main() async{
+void main() async {
   //Widget Binding
-  final WidgetsBinding widgetsBinding =WidgetsFlutterBinding.ensureInitialized();
+  final WidgetsBinding widgetsBinding =
+      WidgetsFlutterBinding.ensureInitialized();
 
   //Getx Storage
   await GetStorage.init();
@@ -46,7 +47,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
       ),
-      );
+    );
   }
 }
-
