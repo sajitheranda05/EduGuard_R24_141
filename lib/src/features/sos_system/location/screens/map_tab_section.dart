@@ -11,13 +11,12 @@ class SOSMapPage extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-
           // Switch for location sharing
           SizedBox(
             height: 48.0,
             width: double.infinity,
             child: Obx(
-                  () => SwitchListTile(
+              () => SwitchListTile(
                 title: const Text('Enable Location Sharing'),
                 value: mapController.isLocationSharingEnabled.value,
                 onChanged: (value) {
@@ -32,7 +31,8 @@ class SOSMapPage extends StatelessWidget {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: mapController.contactIds.map((contactId) {
+                children: mapController.cachedContacts.map((contact) {
+                  final String contactId= contact.id;
                   // Ensure each button captures its own contactId
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -40,19 +40,23 @@ class SOSMapPage extends StatelessWidget {
                       onPressed: () {
                         LatLng? contactLocation = mapController.contactLocations[contactId];
                         if (contactLocation != null) {
-                          print('Updating map with location: $contactLocation for contactId: $contactId');
+                          print(
+                              'Updating map with location: $contactLocation for contactId: $contactId');
                           if (mapController.mapController.value != null) {
-                            mapController.updateMapWithLocation(contactLocation, mapController.mapController.value!);
+                            mapController.updateMapWithLocation(contactLocation,
+                                mapController.mapController.value!);
                           } else {
-                            print('Error: GoogleMapController is not initialized.');
+                            print(
+                                'Error: GoogleMapController is not initialized.');
                           }
                         } else {
-                          print('Error: Location for contactId $contactId not found.');
+                          print(
+                              'Error: Location for contactId $contactId not found.');
                         }
                       },
                       child: Column(
                         children: [
-                          Text('Contact : ${contactId}'),
+                          Text(contact.name),
                         ],
                       ), // Replace with contact name if available
                     ),
@@ -65,7 +69,7 @@ class SOSMapPage extends StatelessWidget {
           // Map view
           Expanded(
             child: Obx(
-                  () => GoogleMap(
+              () => GoogleMap(
                 onMapCreated: mapController.onMapCreated,
                 initialCameraPosition: CameraPosition(
                   target: mapController.currentLocation.value,

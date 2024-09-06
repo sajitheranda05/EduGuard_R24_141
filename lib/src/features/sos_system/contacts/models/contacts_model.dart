@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ContactsModel {
+  final String id;
   final String email;
   final String name;
   final String number;
   final String priority;
 
   ContactsModel({
+    required this.id,
     required this.email,
     required this.name,
     required this.number,
@@ -15,6 +17,7 @@ class ContactsModel {
 
   //empty contacts model
   static ContactsModel empty() => ContactsModel(
+    id: '',
     email: '',
     name: '',
     number: '',
@@ -24,6 +27,7 @@ class ContactsModel {
   //Convert model to JSON structure
   Map<String, dynamic> toJSON() {
     return {
+      'id' : '',
       'email' : email,
       'name': name,
       'number': number,
@@ -35,6 +39,7 @@ class ContactsModel {
     if (document.data() != null) {
       final data =document.data()!;
       return ContactsModel(
+        id: document.id,
         email: data['email'] ?? '',
         name: data['name'] ?? '',
         number: data['number'] ?? '',

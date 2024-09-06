@@ -1,21 +1,25 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
+import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
+import 'package:eduguard/src/features/sos_system/contacts/models/contacts_model.dart';
 import 'package:eduguard/src/utils/popups/snackbars.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 
 class MapController extends GetxController {
-
   Rx<GoogleMapController?> mapController = Rx<GoogleMapController?>(null);
   Rx<LatLng> currentLocation = Rx<LatLng>(LatLng(0, 0));
   RxSet<Marker> markers = RxSet<Marker>();
   RxBool isLocationSharingEnabled = false.obs;
 
-  Map<String, LatLng> contactLocationsCache ={};
+  Map<String, LatLng> contactLocationsCache = {};
   RxList<String> contactIds = RxList<String>();
+  late List<ContactsModel> cachedContacts = [];
   RxMap<String, LatLng> contactLocations = RxMap<String, LatLng>();
+
+  final contactsController = Get.put(ContactsController());
 
   final Location _location = Location();
 
@@ -25,37 +29,65 @@ class MapController extends GetxController {
   );
 
   @override
-  void onInit() {
+  void onInit() async{
     super.onInit();
-    _getCurrentLocation();
-    _fetchContactsAndLocations();
+    await _getCurrentLocation();
+    await _fetchContactsAndLocations();
     _periodicUpdate();
   }
 
-  // Fetch Location data of emergency Contacts
+  // // Fetch Location data of emergency Contacts
+  // Future<void> _fetchContactsAndLocations() async {
+  //   try {
+  //     await fetchAndCacheEmergencyContactIds();
+  //
+  //     for (String contactId in contactIds) {
+  //       var locationData = await getEmergencyContactLocation(contactId);
+  //
+  //       // Check if location data is valid before storing it
+  //       if (locationData != null &&
+  //           locationData['latitude'] != null &&
+  //           locationData['longitude'] != null) {
+  //         contactLocations[contactId] =
+  //             LatLng(locationData['latitude'], locationData['longitude']);
+  //       } else {
+  //         print('Skipping contact $contactId - location data not available');
+  //         AppSnackBars.warningSnackBar(
+  //             title: 'Not available',
+  //             message: 'Emergency contact loaction data not available...');
+  //       }
+  //     }
+  //   } catch (e) {
+  //     AppSnackBars.errorSnackBar(
+  //         title: 'Error',
+  //         message: 'Fetching Emergency Contact Locations failed...');
+  //   }
+  // }
+
+  // Fetch Location data of emergency contacts
   Future<void> _fetchContactsAndLocations() async {
     try {
+      // Fetch and cache the emergency contact details
       await fetchAndCacheEmergencyContactIds();
 
-      for (String contactId in contactIds) {
-        var locationData = await getEmergencyContactLocation(contactId);
+      // Iterate over the cached contacts to fetch their locations
+      for (var contact in cachedContacts) {
+        var locationData = await getEmergencyContactLocation(contact.id);
 
         // Check if location data is valid before storing it
-        if (locationData != null && locationData['latitude'] != null && locationData['longitude'] != null) {
-          contactLocations[contactId] = LatLng(locationData['latitude'], locationData['longitude']);
+        if (locationData != null &&
+            locationData['latitude'] != null &&
+            locationData['longitude'] != null) {
+          contactLocations[contact.id] = LatLng(locationData['latitude'], locationData['longitude']);
         } else {
-          print('Skipping contact $contactId - location data not available');
-          AppSnackBars.warningSnackBar(
-              title: 'Not available',
-              message: 'Emergency contact loaction data not available...'
-          );
+          print('Skipping contact ${contact.id} - location data not available');
         }
       }
     } catch (e) {
+      print('Error fetching locations: $e');
       AppSnackBars.errorSnackBar(
           title: 'Error',
-          message: 'Fetching Emergency Contact Locations failed...'
-      );
+          message: 'Fetching Emergency Contact Locations failed...');
     }
   }
 
@@ -73,10 +105,12 @@ class MapController extends GetxController {
     if (hasPermission == PermissionStatus.granted) {
       try {
         final locationData = await _location.getLocation();
-        print('Location Data: Latitude: ${locationData.latitude}, Longitude: ${locationData.longitude}');
+        print(
+            'Location Data: Latitude: ${locationData.latitude}, Longitude: ${locationData.longitude}');
 
         if (locationData.latitude != null && locationData.longitude != null) {
-          currentLocation.value = LatLng(locationData.latitude!, locationData.longitude!);
+          currentLocation.value =
+              LatLng(locationData.latitude!, locationData.longitude!);
           _updateMapLocation();
         } else {
           print('Location data is null or invalid');
@@ -163,21 +197,39 @@ class MapController extends GetxController {
       AppSnackBars.successSnackBar(
           duration: 5,
           title: 'You have enabled location sharing...',
-          message: 'Your location will be visible to your emergency contacts while location sharing is enabled.'
-      );
-
+          message:
+              'Your location will be visible to your emergency contacts while location sharing is enabled.');
     } catch (e) {
-
       AppSnackBars.errorSnackBar(
-          duration: 5,
-          title: 'Error',
-          message: 'Location storing failed'
-      );
-
+          duration: 5, title: 'Error', message: 'Location storing failed');
     }
   }
 
-  //Get emergency contact locations
+  // //Get emergency contact locations
+  // Future<Map<String, dynamic>?> getEmergencyContactLocation(String contactId) async {
+  //   if (contactLocationsCache.containsKey(contactId)) {
+  //     return {
+  //       'latitude': contactLocationsCache[contactId]?.latitude,
+  //       'longitude': contactLocationsCache[contactId]?.longitude,
+  //     };
+  //   }
+  //
+  //   DocumentSnapshot snapshot = await FirebaseFirestore.instance
+  //       .collection('Users')
+  //       .doc(contactId)
+  //       .collection('Location')
+  //       .doc('latest')
+  //       .get();
+  //
+  //   if (snapshot.exists) {
+  //     var data = snapshot.data() as Map<String, dynamic>;
+  //     contactLocationsCache[contactId] = LatLng(data['latitude'], data['longitude']);
+  //     return data;
+  //   } else {
+  //     return null;
+  //   }
+  // }
+
   Future<Map<String, dynamic>?> getEmergencyContactLocation(String contactId) async {
     if (contactLocationsCache.containsKey(contactId)) {
       return {
@@ -202,28 +254,44 @@ class MapController extends GetxController {
     }
   }
 
-  //fetch emergency contact ids
+  // //fetch emergency contact ids
+  // Future<void> fetchAndCacheEmergencyContactIds() async {
+  //   try {
+  //     if (contactIds.isEmpty) {
+  //       QuerySnapshot querySnapshot = await FirebaseFirestore.instance
+  //           .collection('EmergencyContacts')
+  //           .doc(AuthenticationRepository.instance.authUser?.uid)
+  //           .collection('Contacts')
+  //           .get();
+  //
+  //       contactIds.value = querySnapshot.docs.map((doc) => doc.id).toList();
+  //
+  //     }
+  //   } catch (e) {
+  //     AppSnackBars.errorSnackBar(
+  //         title: 'Error',
+  //         message: 'Fetching Emergency Contact Ids Failed.'
+  //     );
+  //   }
+  // }
+
   Future<void> fetchAndCacheEmergencyContactIds() async {
     try {
-      if (contactIds.isEmpty) {
-        QuerySnapshot querySnapshot = await FirebaseFirestore.instance
-            .collection('EmergencyContacts')
-            .doc(AuthenticationRepository.instance.authUser?.uid)
-            .collection('Contacts')
-            .get();
-
-        contactIds.value = querySnapshot.docs.map((doc) => doc.id).toList();
-
-        AppSnackBars.successSnackBar(
-            title: 'Success',
-            message: 'Emergency Contacts fetched Successfully...'
-        );
+      if (cachedContacts.isEmpty) {
+        cachedContacts = contactsController.fetchedContacts
+            .map((contact) => ContactsModel(
+                  id: contact.id,
+                  name: contact.name,
+                  email: contact.email,
+                  number: '',
+                  priority: '',
+                ))
+            .toList();
       }
+      AppSnackBars.successSnackBar(title: 'Caching Emergency contacts Successful');
     } catch (e) {
-      AppSnackBars.errorSnackBar(
-          title: 'Error',
-          message: 'Fetching Emergency Contact Ids Failed.'
-      );
+      print('Caching Emergency contacts failed');
+      AppSnackBars.errorSnackBar(title: 'Caching Emergency contacts failed', message: e.toString());
     }
   }
 

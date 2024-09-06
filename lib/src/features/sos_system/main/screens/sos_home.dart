@@ -1,12 +1,13 @@
 import 'package:eduguard/src/common_widgets/Screens/appbar.dart';
 import 'package:eduguard/src/common_widgets/Screens/tabbar.dart';
 import 'package:eduguard/src/features/personalization/controllers/user_controller.dart';
+import 'package:eduguard/src/features/sos_system/chat/screens/sos_all_chats.dart';
 import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings.dart';
 import 'package:eduguard/src/features/sos_system/location/screens/map_tab_section.dart';
 import 'package:eduguard/src/features/sos_system/main/screens/sos_tab_section.dart';
+import 'package:eduguard/src/features/sos_system/sos_state/controllers/wakeword_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_state_manager/get_state_manager.dart';
 
 class SOSHomePage extends StatefulWidget {
   const SOSHomePage({super.key});
@@ -19,6 +20,10 @@ class _SOSHomePageState extends State<SOSHomePage> {
   @override
   Widget build(BuildContext context) {
     final userController = Get.put(UserController());
+    final wakeWordController =Get.put(CommandController());
+
+    //Initialize picovoice
+    wakeWordController.initPicovoice();
 
     return DefaultTabController(
       length: 3,
@@ -82,7 +87,7 @@ class _SOSHomePageState extends State<SOSHomePage> {
                     child: SOSTabScreen(),
                   ),
                   const Center(
-                    child: Text('Content for Chat system'),
+                    child: SOSAllChatsScreen(),
                   ),
                   Center(
                     child: SOSMapPage(),

@@ -25,8 +25,6 @@ class CustomSOSTitleCard extends StatelessWidget {
           style: TextStyle(color: Colors.grey[600], fontSize: 14.0),
         ),
         const Divider(),
-
-        const SizedBox(height: 24.0,),
       ],
     );
   }

@@ -10,6 +10,7 @@ class CustomCircularImage extends StatelessWidget {
     this.width =56,
     this.height =56,
     this.padding =4,
+    this.isSelected=false,
   });
 
   final String image;
@@ -17,6 +18,7 @@ class CustomCircularImage extends StatelessWidget {
   final Color? overlayColor;
   final Color? backgroundColor;
   final double width, height, padding;
+  final isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,7 @@ class CustomCircularImage extends StatelessWidget {
         ),
         child: Center(
           child: CircleAvatar(
-            backgroundColor: Colors.greenAccent,
+            backgroundColor: isSelected? Colors.black : Colors.transparent,
             radius: 72,
             backgroundImage: AssetImage(image),
 

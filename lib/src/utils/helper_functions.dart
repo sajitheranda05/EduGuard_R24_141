@@ -24,4 +24,17 @@ class AppHelperFunctions {
     return phoneNumber;
   }
 
+  static String formatTimestamp(DateTime timestamp) {
+    // Get hour in 12-hour format
+    int hour = timestamp.hour > 12 ? timestamp.hour - 12 : timestamp.hour;
+    // Handle the case where hour is 0 (which is 12 AM in 12-hour format)
+    hour = hour == 0 ? 12 : hour;
+
+    // Determine AM or PM
+    String period = timestamp.hour >= 12 ? 'PM' : 'AM';
+
+    // Return formatted string with AM/PM
+    return '$hour:${timestamp.minute.toString().padLeft(2, '0')} $period';
+  }
+
 }

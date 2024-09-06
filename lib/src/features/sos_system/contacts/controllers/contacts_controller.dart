@@ -1,97 +1,130 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:eduguard/src/data/repositories/authentication_repository.dart';
 import 'package:eduguard/src/data/repositories/contact_repository.dart';
+import 'package:eduguard/src/data/repositories/user_repository.dart';
+import 'package:eduguard/src/features/sos_system/chat/controllers/chat_controller.dart';
+import 'package:eduguard/src/features/sos_system/contacts/controllers/invite_controller.dart';
 import 'package:eduguard/src/features/sos_system/contacts/models/contacts_model.dart';
+import 'package:eduguard/src/features/sos_system/contacts/models/invite_model.dart';
 import 'package:eduguard/src/features/sos_system/contacts/models/user_search_model.dart';
+import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings.dart';
 import 'package:eduguard/src/utils/network_manager.dart';
 import 'package:eduguard/src/utils/popups/full_screen_loader.dart';
 import 'package:eduguard/src/utils/popups/snackbars.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ContactsController extends GetxController {
   static ContactsController get instance => Get.find();
 
-  RxList<UserSearchModel> searchResultsForHighPriorityContact = <UserSearchModel>[].obs;
-  RxList<UserSearchModel> searchResultsForContactOne = <UserSearchModel>[].obs;
-  RxList<UserSearchModel> searchResultsForContactTwo = <UserSearchModel>[].obs;
-  RxList<UserSearchModel> searchResultsForContactThree = <UserSearchModel>[].obs;
+  final userRepository = Get.put(UserRepository());
+  final InviteController inviteController =Get.put(InviteController());
+  final ContactRepository contactRepository =Get.put(ContactRepository());
+  final ChatroomController chatController =Get.put(ChatroomController());
 
-  // Controllers for email fields
-  final highPriorityContactEmail = TextEditingController().obs;
-  final contactOneEmail = TextEditingController().obs;
-  final contactTwoEmail = TextEditingController().obs;
-  final contactThreeEmail = TextEditingController().obs;
+  final String? userId =AuthenticationRepository.instance.authUser?.uid;
+  final String? userEmail = AuthenticationRepository.instance.authUser?.email;
+  final email = TextEditingController();
 
-  // Additional controllers for name and contact number fields
-  final highPriorityContactName = TextEditingController().obs;
-  final highPriorityContactNumber = TextEditingController().obs;
-
-  final contactOneName = TextEditingController().obs;
-  final contactOneNumber = TextEditingController().obs;
-
-  final contactTwoName = TextEditingController().obs;
-  final contactTwoNumber = TextEditingController().obs;
-
-  final contactThreeName = TextEditingController().obs;
-  final contactThreeNumber = TextEditingController().obs;
-
-  var usedEmails =<String>[].obs;
-
+  RxList<UserSearchModel> searchResults = <UserSearchModel>[].obs;
+  RxList<UserSearchModel> selectedUsers = <UserSearchModel>[].obs;
   Rx<ContactsModel> contacts =ContactsModel.empty().obs;
-  final contactRepository =Get.put(ContactRepository());
-  GlobalKey<FormState> contactSettingsFormKey =GlobalKey<FormState>();
-
   RxList<ContactsModel> fetchedContacts = <ContactsModel>[].obs;
+  var selectedContactIndex =(0).obs;
+  //var  selectedContactIndex;
+  var highPriorityContact = ''.obs;
+
+  GlobalKey<FormState> contactSettingsFormKey =GlobalKey<FormState>();
 
   @override
   void onInit() async{
     super.onInit();
-    //await fetchContactsRecord();
     await fetchContactDetails();
-    initializeContacts();
+    await setSelectedContact();
+    searchResults.clear();
+
   }
 
+  void setHighPriorityContact(String? email) async {
+    try {
+
+      // Check if there is any contact with high priority in the fetchedContacts list
+      bool hasHighPriorityContact = fetchedContacts.any((contact) => contact.priority == 'high');
+
+      // If there's an existing high-priority contact, set its priority to 'low'
+      if (hasHighPriorityContact) {
+        final existingHighPriorityContact = fetchedContacts.firstWhere((contact) => contact.priority == 'high');
+
+        await FirebaseFirestore.instance
+            .collection('EmergencyContacts')
+            .doc(userId)
+            .collection('Contacts')
+            .doc(existingHighPriorityContact.id)
+            .update({'priority': 'low'});
+      }
+
+      // Find the contact that matches the provided email
+      final contact = fetchedContacts.firstWhere((contact) => contact.email == email);
+
+      String? contactId = contact.id;
+
+      // Update the priority of the contact
+      await FirebaseFirestore.instance
+          .collection('EmergencyContacts')
+          .doc(userId)
+          .collection('Contacts')
+          .doc(contactId)
+          .update({'priority': 'high'});
+
+      await fetchContactDetails();
+
+      AppSnackBars.successSnackBar(
+          title: 'Success...',
+          message: 'High priority contact saved successfully.'
+      );
+
+    } catch (error) {
+      if (kDebugMode) {
+        print('Error setting high priority contact: $error');
+      }
+    }
+  }
+
+  //set selected contact to high priority contact
+  Future<void> setSelectedContact() async {
+    try {
+      // If no contact is selected, select the high-priority contact or the first one
+      if (fetchedContacts.isNotEmpty) {
+        // Find the high-priority contact, or default to the first contact
+        int highPriorityIndex = fetchedContacts.indexWhere((contact) => contact.priority == 'high');
+
+        if (highPriorityIndex != -1) {
+          selectedContactIndex.value = highPriorityIndex;
+        } else {
+          selectedContactIndex.value = 0;
+        }
+      }
+
+    } catch(error) {
+      if (kDebugMode) {
+        print('Error setting selected contact :  $error');
+      }
+    }
+  }
+
+//select contact
+  void selectContact(int index) {
+    selectedContactIndex.value =index;
+  }
+
+  //Split the fetched full name
   String getFirstName(String fullName) {
     List<String> parts = fullName.split(' ');
     return parts.isNotEmpty ? parts[0] : '';
   }
 
-  // Method to initialize contact fields
-  Future<void> initializeContacts() async {
-
-    final highPriorityContact = fetchedContacts.firstWhere(
-          (c) => c.priority == 'high',
-      orElse: () => ContactsModel.empty(),
-    );
-    highPriorityContactEmail.value.text = highPriorityContact.email;
-    highPriorityContactName.value.text = highPriorityContact.name;
-    highPriorityContactNumber.value.text = highPriorityContact.number;
-
-    final contactOne = fetchedContacts.firstWhere(
-          (c) => c.priority == 'lowOne',
-      orElse: () => ContactsModel.empty(),
-    );
-    contactOneEmail.value.text = contactOne.email;
-    contactOneName.value.text = contactOne.name;
-    contactOneNumber.value.text = contactOne.number;
-
-    final contactTwo = fetchedContacts.firstWhere(
-          (c) => c.priority == 'lowTwo',
-      orElse: () => ContactsModel.empty(),
-    );
-    contactTwoEmail.value.text = contactTwo.email;
-    contactTwoName.value.text = contactTwo.name;
-    contactTwoNumber.value.text = contactTwo.number;
-
-    final contactThree = fetchedContacts.firstWhere(
-          (c) => c.priority == 'lowThree',
-      orElse: () => ContactsModel.empty(),
-    );
-    contactThreeEmail.value.text = contactThree.email;
-    contactThreeName.value.text = contactThree.name;
-    contactThreeNumber.value.text = contactThree.number;
-  }
-
+  //fetch contact details
   Future<void> fetchContactDetails() async {
     try {
       final contactsList = await ContactRepository().fetchContactsDetails();
@@ -122,120 +155,24 @@ class ContactsController extends GetxController {
         return;
       }
 
-      // Controllers are refreshed to capture the latest values
-      contactOneEmail.refresh();
-      contactTwoEmail.refresh();
-      contactThreeEmail.refresh();
-      highPriorityContactEmail.refresh();
-
-      await contactRepository.saveContactsRecord(
-        highPriorityContactEmail: highPriorityContactEmail.value.text.trim(),
-        contactOneEmail: contactOneEmail.value.text.trim(),
-        contactTwoEmail: contactTwoEmail.value.text.trim(),
-        contactThreeEmail: contactThreeEmail.value.text.trim(),
-        highPriorityContactName: highPriorityContactName.value.text.trim(),
-        contactOneName: contactOneName.value.text.trim(),
-        contactTwoName: contactTwoName.value.text.trim(),
-        contactThreeName: contactThreeName.value.text.trim(),
-        highPriorityContactNumber: contactOneNumber.value.text.trim(),
-        contactOneNumber: contactOneNumber.value.text.trim(),
-        contactTwoNumber: contactTwoNumber.value.text.trim(),
-        contactThreeNumber: contactThreeNumber.value.text.trim(),
-      );
-
       //Fetch contact records after saving
       await fetchContactDetails();
+
+      //Update chat contacts after updating emergency contacts
+      chatController.fetchContacts();
+
       AppFullScreenLoader.stopLoading();
 
       AppSnackBars.successSnackBar(title: 'Successful...', message: 'Your contact settings added successfully.');
+
+      //Redirect to SOS settings page
+      Get.off(() => const SOSSettings());
 
     } catch(error) {
       AppSnackBars.errorSnackBar(title: 'Oh snap!', message: error.toString());
     }
   }
 
-  //Add selected emails to used emails
-  bool isEmailUsed(String email) {
-    return usedEmails.contains(email);
-  }
-
-  //Remove emails from used emails
-  void removeEmailFromUsedEmails(String email) {
-    usedEmails.remove(email);
-  }
-
-  // Method to clear text field and remove email from usedEmails
-  void clearEmailField(Rx<TextEditingController> controller) async{
-    if (controller.value.text.isNotEmpty) {
-      removeEmailFromUsedEmails(controller.value.text);
-      controller.value.clear();
-      controller.refresh();
-    }
-  }
-
-  // Assign email and populate additional fields
-  void assignHighPriorityContactEmailToTextField(String selectedEmail) {
-    if (!isEmailUsed(selectedEmail)) {
-      highPriorityContactEmail.value.text = selectedEmail;
-      // Fetch and populate name and contact number based on the email
-      fetchAndPopulateContactDetails(selectedEmail, highPriorityContactName, highPriorityContactNumber);
-      usedEmails.add(selectedEmail);
-      searchResultsForHighPriorityContact.clear();
-    } else {
-      AppSnackBars.errorSnackBar(
-        title: 'Error',
-        message: 'This email has already been selected.',
-      );
-    }
-  }
-
-  // Assign email and populate additional fields
-  void assignContactOneEmailToTextField(String selectedEmail) {
-    if (!isEmailUsed(selectedEmail)) {
-      contactOneEmail.value.text = selectedEmail;
-      // Fetch and populate name and contact number based on the email
-      fetchAndPopulateContactDetails(selectedEmail, contactOneName, contactOneNumber);
-      usedEmails.add(selectedEmail);
-      searchResultsForContactOne.clear();
-    } else {
-      AppSnackBars.errorSnackBar(
-        title: 'Error',
-        message: 'This email has already been selected.',
-      );
-    }
-  }
-
-  // Assign email and populate additional fields
-  void assignContactTwoEmailToTextField(String selectedEmail) {
-    if (!isEmailUsed(selectedEmail)) {
-      contactTwoEmail.value.text = selectedEmail;
-      // Fetch and populate name and contact number based on the email
-      fetchAndPopulateContactDetails(selectedEmail, contactTwoName, contactTwoNumber);
-      usedEmails.add(selectedEmail);
-      searchResultsForContactTwo.clear();
-    } else {
-      AppSnackBars.errorSnackBar(
-        title: 'Error',
-        message: 'This email has already been selected.',
-      );
-    }
-  }
-
-  // Assign email and populate additional fields
-  void assignContactThreeEmailToTextField(String selectedEmail) {
-    if (!isEmailUsed(selectedEmail)) {
-      contactThreeEmail.value.text = selectedEmail;
-      // Fetch and populate name and contact number based on the email
-      fetchAndPopulateContactDetails(selectedEmail, contactThreeName, contactThreeNumber);
-      usedEmails.add(selectedEmail);
-      searchResultsForContactThree.clear();
-    } else {
-      AppSnackBars.errorSnackBar(
-        title: 'Error',
-        message: 'This email has already been selected.',
-      );
-    }
-  }
 
   void fetchAndPopulateContactDetails(
       String email,
@@ -253,95 +190,96 @@ class ContactsController extends GetxController {
     }
   }
 
-  //Search Users for High Priority contact
-  Future<void> searchUsersForHighPriorityContact(String query) async {
+  //Search users to invite as emergency contacts
+  Future<void> searchUsers(String query) async {
     try {
-
       if (query.isEmpty) {
-        searchResultsForHighPriorityContact.clear();
+        searchResults.clear();
         return;
       }
 
-      QuerySnapshot<Map<String, dynamic>> result = await contactRepository.searchUsers(query);
-      searchResultsForHighPriorityContact.clear();
+      QuerySnapshot<Map<String, dynamic>> result = await userRepository.searchUsers(query);
+      searchResults.clear();
 
-      searchResultsForHighPriorityContact.addAll(result.docs.map((doc) {
+      searchResults.addAll(result.docs.map((doc) {
         return UserSearchModel.fromSnapshot(doc);
       }).where((user) =>
-      user.fullName.toLowerCase().contains(query.toLowerCase()) || user.email.toLowerCase().contains(query.toLowerCase())
+      user.fullName.toLowerCase().contains(query.toLowerCase()) ||
+          user.email.toLowerCase().contains(query.toLowerCase())
       ).toList());
-
     } catch (e) {
       AppSnackBars.errorSnackBar(title: 'Search Error', message: 'Something went wrong while searching for users.');
     }
   }
 
-  //Search Users for Contact one
-  Future<void> searchUsersForContactOne(String query) async {
-    try {
+  //Assign selected email to text field
+  void assignEmailToTextField(String assignedEmail) {
+    email.text = assignedEmail;
+    searchResults.clear();
+  }
 
-      if (query.isEmpty) {
-        searchResultsForContactOne.clear();
-        return;
-      }
-
-      QuerySnapshot<Map<String, dynamic>> result = await contactRepository.searchUsers(query);
-      searchResultsForContactOne.clear();
-
-      searchResultsForContactOne.addAll(result.docs.map((doc) {
-        return UserSearchModel.fromSnapshot(doc);
-      }).where((user) =>
-      user.fullName.toLowerCase().contains(query.toLowerCase()) || user.email.toLowerCase().contains(query.toLowerCase())
-      ).toList());
-
-    } catch (e) {
-      AppSnackBars.errorSnackBar(title: 'Search Error', message: 'Something went wrong while searching for users.');
+  //Add email to selected users list
+  void addUserToList(UserSearchModel user) async {
+    if (user.email == userEmail) {
+      AppSnackBars.errorSnackBar(title: 'Cannot add your own email as an emergency contact.');
+    } else if (await inviteController.isEmailAlreadyInvited(userId!, user.email)) {
+      AppSnackBars.errorSnackBar(title: 'This user has already been invited.');
+    } else if (selectedUsers.contains(user)) {
+      AppSnackBars.errorSnackBar(title: 'This user is already in the list.');
+    } else if (selectedUsers.length >= 4) {
+      AppSnackBars.errorSnackBar(title: 'You can only add up to four emergency contacts.');
+    } else {
+      selectedUsers.add(user);
     }
   }
 
-  //Search Users for Contact two
-  Future<void> searchUsersForContactTwo(String query) async {
-    try {
+  //Remove email from selected users list
+  void removeUserFromList(UserSearchModel user) {
+    selectedUsers.remove(user);
+  }
 
-      if (query.isEmpty) {
-        searchResultsForContactTwo.clear();
-        return;
+  //Send invitations to the selected users
+  void sendInvites() async {
+    if (selectedUsers.isEmpty) {
+      AppSnackBars.errorSnackBar(title: 'No users selected to invite.');
+      return;
+    }
+
+    final existingInvitesCount = await FirebaseFirestore.instance
+        .collection('EmergencyContacts')
+        .doc(userId!)
+        .collection('SentInvites')
+        .get()
+        .then((snapshot) => snapshot.docs.length);
+
+    if (existingInvitesCount + selectedUsers.length > 4) {
+      AppSnackBars.errorSnackBar(title: 'You can only send a total of 4 invites.');
+      return;
+    }
+
+    try {
+      for (var user in selectedUsers) {
+        // Create a new InviteModel instance
+        InviteModel invite = InviteModel(
+          id: user.id,
+          email: user.email,
+          name: user.fullName,
+          number: user.contactNumber,
+          inviteStatus: 'pending', // Set the invite status to 'pending'
+        );
+
+        // Send the invite using InviteController
+        await inviteController.sendInvite(userId!, invite);
       }
 
-      QuerySnapshot<Map<String, dynamic>> result = await contactRepository.searchUsers(query);
-      searchResultsForContactTwo.clear();
-
-      searchResultsForContactTwo.addAll(result.docs.map((doc) {
-        return UserSearchModel.fromSnapshot(doc);
-      }).where((user) =>
-      user.fullName.toLowerCase().contains(query.toLowerCase()) || user.email.toLowerCase().contains(query.toLowerCase())
-      ).toList());
-
+      AppSnackBars.successSnackBar(title: 'Invites sent successfully.');
+      selectedUsers.clear();
     } catch (e) {
-      AppSnackBars.errorSnackBar(title: 'Search Error', message: 'Something went wrong while searching for users.');
+      AppSnackBars.errorSnackBar(title: 'Failed to send invites. Please try again.');
     }
   }
 
-  //Search Users for Contact three
-  Future<void> searchUsersForContactThree(String query) async {
-    try {
 
-      if (query.isEmpty) {
-        searchResultsForContactThree.clear();
-        return;
-      }
 
-      QuerySnapshot<Map<String, dynamic>> result = await contactRepository.searchUsers(query);
-      searchResultsForContactThree.clear();
 
-      searchResultsForContactThree.addAll(result.docs.map((doc) {
-        return UserSearchModel.fromSnapshot(doc);
-      }).where((user) =>
-      user.fullName.toLowerCase().contains(query.toLowerCase()) || user.email.toLowerCase().contains(query.toLowerCase())
-      ).toList());
-
-    } catch (e) {
-      AppSnackBars.errorSnackBar(title: 'Search Error', message: 'Something went wrong while searching for users.');
-    }
-  }
 }

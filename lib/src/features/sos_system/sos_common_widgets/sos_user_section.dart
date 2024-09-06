@@ -5,35 +5,42 @@ class CustomSOSUSerImageSection extends StatelessWidget {
   const CustomSOSUSerImageSection({
     super.key,
     required this.contactName,
-    required this.image
+    required this.image,
+    this.isSelected =false,
+    this.borderColor =Colors.transparent,
   });
 
   final String image;
   final String contactName;
+  final bool isSelected;
+  final Color borderColor;
+
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ElevatedButton(
-            onPressed: () {
-
-            },
-            style: ElevatedButton.styleFrom(
-              shape: const CircleBorder(),
-              padding: const EdgeInsets.all(2.0),
-            ),
-            child: CustomCircularImage(image: image)
+        Container(
+          padding: const EdgeInsets.all(4.0),
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            border: Border.all(color: borderColor, width: 4.0), // Border around the image
+          ),
+          child: CircleAvatar(
+            radius: 28.0,
+            backgroundImage: AssetImage(image),
+          ),
         ),
-        const SizedBox(height: 4.0,),
+        const SizedBox(height: 8.0),
         Text(
           contactName,
           style: const TextStyle(
             fontSize: 14.0,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w500,
           ),
         ),
       ],
     );
   }
+
 }

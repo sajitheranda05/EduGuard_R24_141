@@ -89,4 +89,13 @@ class UserRepository extends GetxController {
     }
   }
 
+  //search user details
+  Future<QuerySnapshot<Map<String, dynamic>>> searchUsers(String query) async {
+    return _db
+        .collection('Users')
+        .where('Email', isGreaterThanOrEqualTo: query)
+        .where('Email', isLessThanOrEqualTo: query + '\uf8ff')
+        .get();
+  }
+
 }

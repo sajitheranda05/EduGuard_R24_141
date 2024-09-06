@@ -17,8 +17,17 @@ class SignInController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    email.text =localStorage.read('REMEMBER_ME_EMAIL');
-    password.text =localStorage.read('REMEMBER_ME_PASSWORD');
+    final storedEmail = localStorage.read('REMEMBER_ME_EMAIL');
+    final storedPassword = localStorage.read('REMEMBER_ME_PASSWORD');
+
+    // Check if the email and password are not null or empty
+    if (storedEmail != null && storedEmail.isNotEmpty) {
+      email.text = storedEmail;
+    }
+
+    if (storedPassword != null && storedPassword.isNotEmpty) {
+      password.text = storedPassword;
+    }
   }
 
   Future<void> emailandPasswordSignIn() async {

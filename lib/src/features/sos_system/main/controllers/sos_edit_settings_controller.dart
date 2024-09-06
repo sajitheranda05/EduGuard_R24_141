@@ -64,58 +64,58 @@ class ContactSettingsController extends GetxController {
   //   }
   // }
 
-  //Save contact settings
-  void saveContactSettings() async{
-    try {
-      //Start Loader
-      AppFullScreenLoader.openLoadingDialog('We are processing your information...');
-
-      //check network connectivity
-      final isConnected =await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        AppFullScreenLoader.stopLoading();
-        return;
-      }
-
-      //Form validation
-      if(contactSettingsFormKey.currentState!.validate()) {
-        contactSettingsFormKey.currentState!.save();
-      }else{
-        AppFullScreenLoader.stopLoading();
-        return;
-      }
-
-      // Controllers are refreshed to capture the latest values
-      contactOneEmail.refresh();
-      contactTwoEmail.refresh();
-      contactThreeEmail.refresh();
-      highPriorityContactEmail.refresh();
-
-      await contactRepository.saveContactsRecord(
-        highPriorityContactEmail: highPriorityContactEmail.value.text.trim(),
-        contactOneEmail: contactOneEmail.value.text.trim(),
-        contactTwoEmail: contactTwoEmail.value.text.trim(),
-        contactThreeEmail: contactThreeEmail.value.text.trim(),
-        highPriorityContactName: '',
-        contactOneName: '',
-        contactTwoName: '',
-        contactThreeName: '',
-        highPriorityContactNumber: '',
-        contactOneNumber: '',
-        contactTwoNumber: '',
-        contactThreeNumber: '',
-      );
-
-      //Fetch contact records after saving
-      //await fetchContactsRecord();
-      AppFullScreenLoader.stopLoading();
-
-      AppSnackBars.successSnackBar(title: 'Successful...', message: 'Your contact settings added successfully.');
-
-    } catch(error) {
-      AppSnackBars.errorSnackBar(title: 'Oh snap!', message: error.toString());
-    }
-  }
+  // //Save contact settings
+  // void saveContactSettings() async{
+  //   try {
+  //     //Start Loader
+  //     AppFullScreenLoader.openLoadingDialog('We are processing your information...');
+  //
+  //     //check network connectivity
+  //     final isConnected =await NetworkManager.instance.isConnected();
+  //     if (!isConnected) {
+  //       AppFullScreenLoader.stopLoading();
+  //       return;
+  //     }
+  //
+  //     //Form validation
+  //     if(contactSettingsFormKey.currentState!.validate()) {
+  //       contactSettingsFormKey.currentState!.save();
+  //     }else{
+  //       AppFullScreenLoader.stopLoading();
+  //       return;
+  //     }
+  //
+  //     // Controllers are refreshed to capture the latest values
+  //     contactOneEmail.refresh();
+  //     contactTwoEmail.refresh();
+  //     contactThreeEmail.refresh();
+  //     highPriorityContactEmail.refresh();
+  //
+  //     await contactRepository.saveContactsRecord(
+  //       highPriorityContactEmail: highPriorityContactEmail.value.text.trim(),
+  //       contactOneEmail: contactOneEmail.value.text.trim(),
+  //       contactTwoEmail: contactTwoEmail.value.text.trim(),
+  //       contactThreeEmail: contactThreeEmail.value.text.trim(),
+  //       highPriorityContactName: '',
+  //       contactOneName: '',
+  //       contactTwoName: '',
+  //       contactThreeName: '',
+  //       highPriorityContactNumber: '',
+  //       contactOneNumber: '',
+  //       contactTwoNumber: '',
+  //       contactThreeNumber: '',
+  //     );
+  //
+  //     //Fetch contact records after saving
+  //     //await fetchContactsRecord();
+  //     AppFullScreenLoader.stopLoading();
+  //
+  //     AppSnackBars.successSnackBar(title: 'Successful...', message: 'Your contact settings added successfully.');
+  //
+  //   } catch(error) {
+  //     AppSnackBars.errorSnackBar(title: 'Oh snap!', message: error.toString());
+  //   }
+  // }
 
   //Search Users for High Priority contact
   Future<void> searchUsersForHighPriorityContact(String query) async {

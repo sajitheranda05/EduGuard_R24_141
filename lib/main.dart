@@ -1,6 +1,8 @@
 import 'package:eduguard/firebase_options.dart';
 import 'package:eduguard/src/bindings/general_bindings.dart';
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
+import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
+import 'package:eduguard/src/utils/notification_manager.dart';
 import 'package:eduguard/src/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +24,9 @@ void main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((FirebaseApp value) => Get.put(AuthenticationRepository()));
+
+  await NotificationManager().initNotifications();
+
 
   runApp(const MyApp());
 }
