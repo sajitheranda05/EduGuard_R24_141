@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
 import 'package:eduguard/src/features/sos_system/contacts/models/contacts_model.dart';
 import 'package:eduguard/src/features/sos_system/contacts/models/user_search_model.dart';
+import 'package:eduguard/src/utils/popups/snackbars.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -237,6 +238,37 @@ class ContactRepository extends GetxController {
     } catch (e) {
       throw 'Error fetching user details: $e';
     }
+  }
+
+  Future<void> deleteEmergencyContact(String userId, String connectedUserId) async {
+    try{
+
+      //Remove the contact from users collection
+      await _db
+          .collection('EmergencyContacts')
+          .doc(userId)
+          .collection('Contacts')
+          .doc(connectedUserId)
+          .delete();
+
+      //Remove the user from connected user's collection
+      await _db
+          .collection('EmergencyContacts')
+          .doc(connectedUserId)
+          .collection('Contacts')
+          .doc(userId)
+          .delete();
+
+    } on FirebaseException catch (e) {
+      throw Exception('Firebase Exception: $e');
+    } on FormatException catch (e) {
+      throw Exception('Format Exception: $e');
+    } on PlatformException catch (e) {
+      throw Exception('Platform Exception: $e');
+    } catch (e) {
+      throw Exception('Something went wrong, Please try again');
+    }
+
   }
 
 

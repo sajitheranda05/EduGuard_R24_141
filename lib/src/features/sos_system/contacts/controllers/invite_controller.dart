@@ -139,13 +139,13 @@ class InviteController extends GetxController {
         .doc(invite.id)
         .update({'inviteStatus': 'accepted'});
 
-    // // Remove the invite from the Invites collection
-    //   await _firestore
-    //       .collection('EmergencyContacts')
-    //       .doc(userId)
-    //       .collection('Invites')
-    //       .doc(invite.id)
-    //       .delete();
+    // Remove the invite from the Invites collection
+      await _firestore
+          .collection('EmergencyContacts')
+          .doc(userId)
+          .collection('Invites')
+          .doc(invite.id)
+          .delete();
 
     //update the status of sent invite
     await _firestore
@@ -154,6 +154,14 @@ class InviteController extends GetxController {
         .collection('SentInvites')
         .doc(userId)
         .update({'inviteStatus': 'accepted'});
+
+    // Remove the invite from the Invites collection
+    await _firestore
+        .collection('EmergencyContacts')
+        .doc(invite.id)
+        .collection('SentInvites')
+        .doc(userId)
+        .delete();
   }
 
 
@@ -168,13 +176,13 @@ class InviteController extends GetxController {
         .doc(invite.id)
         .update({'inviteStatus': 'rejected'});
 
-    // // Remove the invite from the Invites collection
-    //   await _firestore
-    //       .collection('EmergencyContacts')
-    //       .doc(userId)
-    //       .collection('Invites')
-    //       .doc(invite.id)
-    //       .delete();
+    // Remove the invite from the Invites collection
+      await _firestore
+          .collection('EmergencyContacts')
+          .doc(userId)
+          .collection('Invites')
+          .doc(invite.id)
+          .delete();
 
     //update the status of sent invite
     await _firestore
@@ -183,6 +191,14 @@ class InviteController extends GetxController {
         .collection('SentInvites')
         .doc(userId)
         .update({'inviteStatus': 'rejected'});
+
+    // Remove the invite from the Invites collection
+    await _firestore
+        .collection('EmergencyContacts')
+        .doc(invite.id)
+        .collection('SentInvites')
+        .doc(userId)
+        .delete();
   }
 
   // Check if the email is already in SentInvites or Invites

@@ -1,3 +1,4 @@
+import 'package:eduguard/src/data/repositories/authentication_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
@@ -137,11 +138,27 @@ class _ContactSettingsScreenState extends State<ContactSettingsScreen> {
 
               // Display additional contacts if available
               ...contactsController.fetchedContacts.map(
-                    (contact) => CustomSOSContactDisplay(
-                  contactName: contact.name,
-                  contactNumber: contact.number,
-                  email: contact.email,
-                ),
+                    (contact) => Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomSOSContactDisplay(
+                                          contactName: contact.name,
+                                          contactNumber: '',
+                                          email: contact.email,
+                                        ),
+                        const SizedBox(width: 4,),
+                        OutlinedButton(
+                          onPressed: () async{
+                            await contactsController.deleteEmergencyContact(
+                                AuthenticationRepository.instance.authUser!.uid,
+                                contact.id
+                            );
+                          },
+                          child: const Icon(Icons.delete_forever_rounded, color: Colors.red,),)
+                      ],
+                    ),
+                
+                
               ),
               const Divider(),
             ],

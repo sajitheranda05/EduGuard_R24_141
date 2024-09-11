@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import 'package:eduguard/src/features/sos_system/sos_state/handle_api.dart';
 import 'package:eduguard/src/features/sos_system/sos_state/handle_audio.dart';
@@ -8,7 +10,7 @@ class AudioController extends GetxController {
   final SpeechEmotionDetectionAPIService _emotionService = SpeechEmotionDetectionAPIService();
   EMADistressDetection _distressDetector = EMADistressDetection(0.2, 2.5);
   final RxString _predictedEmotion = 'Unknown'.obs;
-  bool _isRecording = true;
+  RxBool isRecording = true.obs;
   bool _isDisposed = false;
 
   // Example scoring systems
@@ -33,7 +35,7 @@ class AudioController extends GetxController {
 
   @override
   void onClose() {
-    _isRecording = false;
+    isRecording.value = false;
     _isDisposed = true;
     super.onClose();
   }
@@ -79,10 +81,33 @@ class AudioController extends GetxController {
 
   void _startContinuousEmotionPrediction() {
     Future.doWhile(() async {
-      if (!_isRecording || _isDisposed) return false;
+      if (!isRecording.value || _isDisposed) return false;
       await _predictEmotion();
       await Future.delayed(Duration(seconds: 5)); // Wait before the next prediction
       return true; // Continue the loop
     });
   }
+
+  Future<void> cancelRecording() async {
+    // Set the flag to stop the continuous prediction
+    isRecording.value = false;
+
+    try {
+      // If recording is ongoing, stop it
+      if (await _audioRecorder.isRecording()) {
+        await _audioRecorder.stopRecording();
+        log("Recording canceled.");
+      }
+    } catch (error) {
+      print("Error while canceling recording: $error");
+    }
+  }
+
+  Future<void> restartPrediction() async {
+    await cancelRecording();  // Stop any existing prediction
+    _isDisposed = false;      // Reset the disposed state
+    isRecording.value = true; // Set recording to true
+    _startContinuousEmotionPrediction(); // Start continuous prediction again
+  }
+
 }

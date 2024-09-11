@@ -1,6 +1,7 @@
 import 'package:eduguard/src/features/sos_system/chat/controllers/chat_controller.dart';
 import 'package:eduguard/src/features/sos_system/chat/screens/chat_screen.dart';
 import 'package:eduguard/src/features/sos_system/contacts/screens/sos_edit_contacts.dart';
+import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings.dart';
 import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +49,7 @@ class _SOSAllChatsScreenState extends State<SOSAllChatsScreen> {
                 const SizedBox(height: 8),
                 ElevatedButton(
                   onPressed: () {
-                    Get.to(() =>  ContactSettingsScreen());
+                    Get.to(() =>  const SOSSettings());
                   },
                   child: const Text('Add Emergency Contacts'),
                 ),

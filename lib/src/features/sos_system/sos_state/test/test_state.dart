@@ -20,10 +20,20 @@ class AudioState extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'App is recording...',
-                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-                ),
+
+                Obx(() {
+                  return audioController.isRecording.value
+                      ? Text(
+                    'App is processing...',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  )
+                      :
+                  Text(
+                    'App is idle...',
+                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
+                  );
+
+                }),
                 SizedBox(height: 4),
                 Text(
                   'Recorded audio will be analyzed to identify distress instances.',
@@ -32,24 +42,40 @@ class AudioState extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 8),
-                Obx(() => Text(
-                  'Predicted Emotion: ${audioController.predictedEmotion}',
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-                )),
+                // Obx(() => Text(
+                //       'Predicted Emotion: ${audioController.predictedEmotion}',
+                //       style:
+                //           TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                //     )),
               ],
             ),
           ),
-          OutlinedButton(
-            onPressed: () {
-              audioController.onClose(); // Ensure resources are cleaned up
-              // You can also handle stopping the recording and emotion prediction here
-            },
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.red,
-              side: const BorderSide(color: Colors.red),
-            ),
-            child: const Text('Cancel'),
-          ),
+          Obx(() {
+            return audioController.isRecording.value
+                ? OutlinedButton(
+                    onPressed: () async {
+                      await audioController.cancelRecording();
+                      audioController.onClose();
+                    },
+                    style: OutlinedButton.styleFrom(
+                      foregroundColor: Colors.red,
+                      side: const BorderSide(color: Colors.red),
+                    ),
+                    child: const Text('Cancel'),
+                  )
+                : ElevatedButton(
+                    onPressed: () async {
+                      await audioController.restartPrediction();
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0)
+                    ),
+                    child: Icon(
+                      Icons.refresh_rounded,
+                      size: 32,
+                    ),
+                  );
+          })
         ],
       ),
     );

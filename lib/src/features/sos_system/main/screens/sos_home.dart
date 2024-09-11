@@ -58,7 +58,7 @@ class _SOSHomePageState extends State<SOSHomePage> {
                 onPressed: () {
                   Get.to(() => const SOSSettings());
                 },
-                icon: const Icon(Icons.settings_rounded))
+                icon: const Icon(Icons.supervised_user_circle_sharp))
           ],
         ),
         body: Column(

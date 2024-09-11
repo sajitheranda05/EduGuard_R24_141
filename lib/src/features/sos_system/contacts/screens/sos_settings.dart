@@ -32,8 +32,8 @@ class SOSSettings extends StatelessWidget {
             children: [
 
               const CustomSOSTitleCard(
-                title: 'Settings',
-                subtitle: 'This is the section for the contact settings.',
+                title:'Emergency Contacts',
+                subtitle: 'This is the section for the emergency contact settings.',
               ),
 
 

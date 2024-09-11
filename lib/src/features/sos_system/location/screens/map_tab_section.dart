@@ -37,7 +37,8 @@ class SOSMapPage extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: OutlinedButton(
-                      onPressed: () {
+                      onPressed: () async{
+                        await mapController.getEmergencyContactLocation(contactId);
                         LatLng? contactLocation = mapController.contactLocations[contactId];
                         if (contactLocation != null) {
                           print(

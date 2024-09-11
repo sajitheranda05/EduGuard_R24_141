@@ -15,7 +15,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ContactsController extends GetxController {
+class ContactsController extends GetxController with WidgetsBindingObserver {
   static ContactsController get instance => Get.find();
 
   final userRepository = Get.put(UserRepository());
@@ -40,11 +40,30 @@ class ContactsController extends GetxController {
   @override
   void onInit() async{
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     await fetchContactDetails();
     await setSelectedContact();
     searchResults.clear();
-
   }
+
+  @override
+  void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.onClose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      onResumeCalled();
+    }
+  }
+
+  void onResumeCalled() async{
+    print("Page resumed");
+    await fetchContactDetails();
+  }
+
 
   void setHighPriorityContact(String? email) async {
     try {
@@ -276,6 +295,20 @@ class ContactsController extends GetxController {
       selectedUsers.clear();
     } catch (e) {
       AppSnackBars.errorSnackBar(title: 'Failed to send invites. Please try again.');
+    }
+  }
+
+  Future<void> deleteEmergencyContact(String userId, String connectedUserId) async {
+    try {
+      await chatController.deleteChatroom(userId, connectedUserId);
+      await contactRepository.deleteEmergencyContact(userId, connectedUserId);
+
+      AppSnackBars.successSnackBar(title: 'Success', message: 'Contact deleted successfully.');
+
+      await fetchContactDetails();
+    } catch (e) {
+      AppSnackBars.errorSnackBar(
+          title: 'Erroe deleting contact...', message: e.toString());
     }
   }
 

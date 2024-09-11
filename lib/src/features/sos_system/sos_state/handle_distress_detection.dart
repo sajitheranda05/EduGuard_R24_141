@@ -10,7 +10,7 @@ class EMADistressDetection {
     if (_currentEMA == null) {
       _currentEMA = score;
     } else {
-      // Apply the EMA formula: EMA_new = alpha * score + (1 - alpha) * EMA_previous
+      // EMA_new = alpha * score + (1 - alpha) * EMA_previous
       _currentEMA = alpha * score + (1 - alpha) * _currentEMA!;
     }
 

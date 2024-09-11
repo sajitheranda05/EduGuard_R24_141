@@ -241,5 +241,14 @@ class ChatroomController extends GetxController {
     }
   }
 
+  Future<void> deleteChatroom(String userId, String contactId) async {
+    final chatroomId =await getChatroomId(userId, contactId);
+    //Remove the contact from users collection
+    await FirebaseFirestore.instance
+        .collection('Chatrooms')
+        .doc(chatroomId)
+        .delete();
+  }
+
 
 }

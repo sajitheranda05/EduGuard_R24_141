@@ -14,19 +14,21 @@ class CustomSOSContactDisplay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(contactName, style: const TextStyle(fontSize: 16.0),),
-            Text(contactNumber, style: const TextStyle(fontSize: 16.0),),
+            Text(email, style: const TextStyle(fontSize: 14.0),),
           ],
         ),
-        const SizedBox(height: 2.0,),
-        Text(email, style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300)),
-        const SizedBox(height: 12.0,),
+
+        Text(contactNumber, style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.w300)),
+
       ],
     );
   }

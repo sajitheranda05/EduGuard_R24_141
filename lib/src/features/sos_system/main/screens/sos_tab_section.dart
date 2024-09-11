@@ -3,6 +3,7 @@ import 'package:eduguard/src/features/sos_system/sos_state/screens/sos_state.dar
 import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_user_section.dart';
 import 'package:eduguard/src/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SOSTabScreen extends StatelessWidget {
@@ -27,12 +28,14 @@ class SOSTabScreen extends StatelessWidget {
                 child: ElevatedButton(
                   onPressed: () {
                     // Add your SOS button functionality here
+                    HapticFeedback.selectionClick();
                     Get.to(() => const SOSStateScreen());
                     print('SOS Button Pressed');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.red,
                     shape: const CircleBorder(),
+                    side: const BorderSide(color: Colors.red),
                     padding: const EdgeInsets.all(96.0),
                   ),
                   child: const Icon(
@@ -44,7 +47,7 @@ class SOSTabScreen extends StatelessWidget {
               ),
               Obx(() {
                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     ...contactsController.fetchedContacts.map(
                         (contact) => CustomSOSUSerImageSection(

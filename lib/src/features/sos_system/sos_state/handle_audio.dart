@@ -41,4 +41,8 @@ class AudioRecorderService {
     return _filePath;
   }
 
+  Future<bool> isRecording() async {
+    return await _recorder.isRecording();
+  }
+
 }
