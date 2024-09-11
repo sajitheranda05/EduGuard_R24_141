@@ -10,6 +10,7 @@ class CustomCircularImage extends StatelessWidget {
     this.width =56,
     this.height =56,
     this.padding =4,
+    this.isSelected=false,
   });
 
   final String image;
@@ -17,6 +18,7 @@ class CustomCircularImage extends StatelessWidget {
   final Color? overlayColor;
   final Color? backgroundColor;
   final double width, height, padding;
+  final isSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -24,13 +26,14 @@ class CustomCircularImage extends StatelessWidget {
         width: width,
         height: height,
         padding: EdgeInsets.all(padding),
+        margin: const EdgeInsets.only(bottom: 2.0),
         decoration: BoxDecoration(
         color: backgroundColor ?? Colors.greenAccent,
         borderRadius: BorderRadius.circular(100),
         ),
         child: Center(
           child: CircleAvatar(
-            backgroundColor: Colors.greenAccent,
+            backgroundColor: isSelected? Colors.black : Colors.transparent,
             radius: 72,
             backgroundImage: AssetImage(image),
 

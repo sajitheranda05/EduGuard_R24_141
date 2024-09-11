@@ -1,4 +1,4 @@
-import 'package:eduguard/src/features/sos_system/screens/sos_home.dart';
+import 'package:eduguard/src/features/sos_system/main/screens/sos_home.dart';
 import 'package:eduguard/src/features/std_detection/screens/std_home.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

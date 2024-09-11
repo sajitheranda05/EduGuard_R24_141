@@ -1,6 +1,9 @@
 import 'package:eduguard/firebase_options.dart';
 import 'package:eduguard/src/bindings/general_bindings.dart';
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
+import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
+import 'package:eduguard/src/utils/notification_manager.dart';
+import 'package:eduguard/src/utils/theme/theme.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
@@ -22,6 +25,9 @@ void main() async{
     options: DefaultFirebaseOptions.currentPlatform,
   ).then((FirebaseApp value) => Get.put(AuthenticationRepository()));
 
+  await NotificationManager().initNotifications();
+
+
   runApp(const MyApp());
 }
 
@@ -34,9 +40,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: "EduguardLK",
-      theme: ThemeData(
-        primaryColor: Colors.blue,
-      ),
+      theme: AppTheme.themeData,
       initialBinding: GeneralBindings(),
       home: const Scaffold(
         backgroundColor: Colors.greenAccent,

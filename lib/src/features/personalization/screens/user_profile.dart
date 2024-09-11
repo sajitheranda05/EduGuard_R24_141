@@ -3,6 +3,7 @@ import 'package:eduguard/src/common_widgets/Screens/circular_image.dart';
 import 'package:eduguard/src/common_widgets/Screens/profile_field.dart';
 import 'package:eduguard/src/features/personalization/controllers/user_controller.dart';
 import 'package:eduguard/src/features/personalization/screens/change_name.dart';
+import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_title_card.dart';
 import 'package:eduguard/src/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -16,13 +17,17 @@ class UserProfile extends StatelessWidget {
     return Scaffold(
       appBar: const CustomAppBar(
         showBackArrow: true,
-        title: Text('User Profile',style: TextStyle(fontSize: 24.0, fontWeight: FontWeight.bold,),),
       ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 12.0),
           child: Column(
             children: [
+
+              const CustomSOSTitleCard(
+                  title: 'User Profile',
+                  subtitle: 'This is the profile section.',
+              ),
 
               SizedBox(
                 width: double.infinity,
@@ -38,8 +43,6 @@ class UserProfile extends StatelessWidget {
                   ],
                 ),
               ),
-
-              const SizedBox(height: 8.0,),
               const Divider(),
 
               const SizedBox(height: 8.0,),
@@ -85,9 +88,8 @@ class UserProfile extends StatelessWidget {
               CustomProfileField(onPressed: () {}, title: 'Gender', value: 'Male'),
               CustomProfileField(onPressed: () {}, title: 'Date of Birth', value: '12 Dec, 1999'),
 
-              const SizedBox(height: 8.0,),
+              const SizedBox(height: 4.0,),
               const Divider(),
-              const SizedBox(height: 8.0,),
 
               SizedBox(
                 child: TextButton(

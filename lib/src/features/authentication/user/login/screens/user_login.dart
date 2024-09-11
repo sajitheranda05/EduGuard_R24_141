@@ -35,12 +35,14 @@ class UserLogin extends StatelessWidget {
               child: Column(
                 children: [
 
-                  const SizedBox(height: 24.0,),
+                  const SizedBox(height: 48.0,),
                   TextFormField(
                     controller: loginController.email,
                     validator: (value) => AppValidations.validateEmail(value),
                     decoration: const InputDecoration(label: Text('Email')),
                   ),
+
+                  const SizedBox(height: 24.0,),
 
                   Obx(
                         () => TextFormField(
@@ -59,7 +61,7 @@ class UserLogin extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 12.0,),
+                  const SizedBox(height: 24.0,),
                 ],
               ),
             ),

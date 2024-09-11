@@ -37,6 +37,7 @@ class UserSignUp extends StatelessWidget {
                   key: signUpcontroller.signupFormKey,
                   child: Column(
                     children: [
+                      const SizedBox(height: 24.0,),
                       Row(
                         children: [
                           Expanded(
@@ -58,6 +59,8 @@ class UserSignUp extends StatelessWidget {
                           ),
                         ],
                       ),
+
+                      const SizedBox(height: 12.0,),
 
                       TextFormField(
                         controller: signUpcontroller.age,

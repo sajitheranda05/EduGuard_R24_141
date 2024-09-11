@@ -74,6 +74,7 @@ class SignUpController extends GetxController {
       Get.to(() => EmailVerification(email: email.text.trim(),));
 
     } catch (error) {
+      AppFullScreenLoader.stopLoading();
       AppSnackBars.errorSnackBar(title: 'Oh snap!', message: error.toString());
     }
 

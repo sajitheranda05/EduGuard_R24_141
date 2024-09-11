@@ -25,6 +25,22 @@ class AppValidations {
     return null;
   }
 
+  // validations for contact emails
+  static String? validateContactEmail(String? value) {
+
+    if (value == null || value.isEmpty) {
+      return null;
+    } else {
+      // Regular expression for email validation
+      final emailRegExp = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+
+      if (!emailRegExp.hasMatch(value)) {
+        return 'Invalid email address.';
+      }
+    }
+    return null;
+  }
+
   // validations for password
   static String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
