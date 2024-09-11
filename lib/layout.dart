@@ -10,13 +10,14 @@ class Layout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final navigationController =Get.put(NavigationController());
-    final navigationDrawerController =Get.put(NavigationDrawerController());
+    final navigationController = Get.put(NavigationController());
+    final navigationDrawerController = Get.put(NavigationDrawerController());
 
     return Scaffold(
       key: navigationDrawerController.scaffoldKey,
       drawer: const CustomNavigationDrawer(),
-      body: Obx(() => navigationController.screens[navigationController.selectedIndex.value]),
+      body: Obx(() => navigationController
+          .screens[navigationController.selectedIndex.value]),
       bottomNavigationBar: const CustomBottomNavigationBar(),
     );
   }

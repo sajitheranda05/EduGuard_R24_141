@@ -45,6 +45,8 @@ dependencies:
   flutter_phone_direct_caller: ^2.1.1
   firebase_messaging: ^15.1.0
   flutter_local_notifications: ^17.2.2
+  url_launcher: ^6.1.8
+  firebase_storage: ^12.2.0 
   flutter:
     sdk: flutter
 
@@ -62,7 +64,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^3.0.0
+  flutter_lints: ^4.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -80,6 +82,7 @@ flutter:
     - assets/logos/
     - assets/images/on_boarding_images/
     - assets/images/login_images/
+    - assets/images/std_images/
     - assets/images/user/
     - assets/picovoice/Eduguard_en_android_v3_0_0.rhn
     - assets/picovoice/Edu-help_en_android_v3_0_0.ppn

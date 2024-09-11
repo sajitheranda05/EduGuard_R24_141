@@ -5,7 +5,6 @@
 // clang-format off
 
 #include "generated_plugin_registrant.h"
-
 #include <record_linux/record_linux_plugin.h>
 
 void fl_register_plugins(FlPluginRegistry* registry) {
