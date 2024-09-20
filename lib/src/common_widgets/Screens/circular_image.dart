@@ -1,3 +1,4 @@
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 
 class CustomCircularImage extends StatelessWidget {
@@ -28,7 +29,7 @@ class CustomCircularImage extends StatelessWidget {
         padding: EdgeInsets.all(padding),
         margin: const EdgeInsets.only(bottom: 2.0),
         decoration: BoxDecoration(
-        color: backgroundColor ?? Colors.greenAccent,
+        color: backgroundColor ?? AppColors.secondary,
         borderRadius: BorderRadius.circular(100),
         ),
         child: Center(

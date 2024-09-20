@@ -1,4 +1,5 @@
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
@@ -35,6 +36,7 @@ class _ContactSettingsScreenState extends State<ContactSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       appBar: const CustomAppBar(
         showBackArrow: true,
       ),

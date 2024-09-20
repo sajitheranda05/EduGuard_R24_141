@@ -2,6 +2,7 @@ import 'package:eduguard/src/common_widgets/Screens/circular_image.dart';
 import 'package:eduguard/src/data/repositories/authentication_repository.dart';
 import 'package:eduguard/src/features/personalization/controllers/user_controller.dart';
 import 'package:eduguard/src/features/personalization/screens/user_profile.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:eduguard/src/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class CustomNavigationDrawer extends StatelessWidget {
     final userController =UserController.instance;
     return Drawer(
       elevation: 5.0,
+      backgroundColor: AppColors.primaryBackground,
       child: ListView(
         padding: EdgeInsets.zero,
         children:[
@@ -35,13 +37,13 @@ class CustomNavigationDrawer extends StatelessWidget {
               width: 48,
               height: 48,
             ),
-            decoration: const BoxDecoration(
-              color: Colors.black,
+            decoration:  BoxDecoration(
+              color: AppColors.primary,
             ),
             onDetailsPressed: () {
               Get.to(() => const UserProfile());
             },
-            arrowColor: Colors.black,
+            arrowColor: AppColors.primary,
           ),
 
           ListTile(
@@ -55,6 +57,30 @@ class CustomNavigationDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.school_rounded),
             title: const Text('Education'),
+            onTap: () {
+              //Get.to(() => const TestPage());
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.article_rounded),
+            title: const Text('Blogs'),
+            onTap: () {
+              //Get.to(() => const TestPage());
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.quiz_rounded),
+            title: const Text('Questionnaire'),
+            onTap: () {
+              //Get.to(() => const TestPage());
+            },
+          ),
+
+          ListTile(
+            leading: const Icon(Icons.medical_information_rounded),
+            title: const Text('Health'),
             onTap: () {
               //Get.to(() => const TestPage());
             },

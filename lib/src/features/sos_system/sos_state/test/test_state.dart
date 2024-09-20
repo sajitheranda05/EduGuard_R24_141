@@ -1,4 +1,5 @@
 import 'package:eduguard/src/features/sos_system/sos_state/test/controller.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +9,7 @@ class AudioState extends StatelessWidget {
     final AudioController audioController = Get.put(AudioController());
 
     return Container(
+      color: AppColors.primaryBackground,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -68,6 +70,8 @@ class AudioState extends StatelessWidget {
                       await audioController.restartPrediction();
                     },
                     style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColors.secondary,
+                      side: const BorderSide(color: AppColors.secondary),
                       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 4.0)
                     ),
                     child: Icon(

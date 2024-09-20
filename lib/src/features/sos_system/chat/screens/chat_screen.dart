@@ -24,7 +24,7 @@ class ChatroomScreen extends StatelessWidget {
           return const Center(
             child: CircularProgressIndicator(
               color: AppColors.primary,
-              backgroundColor: Colors.white,
+              backgroundColor: AppColors.primaryBackground,
             ),
           );
         }
@@ -34,6 +34,7 @@ class ChatroomScreen extends StatelessWidget {
         controller.fetchMessages(chatroomId);
 
         return Scaffold(
+          backgroundColor: AppColors.primaryBackground,
           appBar: CustomAppBar(
             showBackArrow: true,
             title: Text('Chat with $contactName'),

@@ -13,6 +13,7 @@ class SOSSettingsTabInvite extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2.0, vertical: 8.0),

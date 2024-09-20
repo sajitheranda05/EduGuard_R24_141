@@ -6,6 +6,7 @@ import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings.d
 import 'package:eduguard/src/features/sos_system/location/screens/map_tab_section.dart';
 import 'package:eduguard/src/features/sos_system/main/screens/sos_tab_section.dart';
 import 'package:eduguard/src/features/sos_system/sos_state/controllers/wakeword_controller.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -28,6 +29,7 @@ class _SOSHomePageState extends State<SOSHomePage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: AppColors.primaryBackground,
         appBar: CustomAppBar(
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

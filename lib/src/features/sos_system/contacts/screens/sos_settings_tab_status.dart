@@ -17,6 +17,7 @@ class SOSSettingsTabStatus extends StatelessWidget {
     inviteController.fetchInvites(userId);
 
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       body: Column(
         children: [
 

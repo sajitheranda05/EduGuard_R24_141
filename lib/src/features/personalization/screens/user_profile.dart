@@ -4,6 +4,7 @@ import 'package:eduguard/src/common_widgets/Screens/profile_field.dart';
 import 'package:eduguard/src/features/personalization/controllers/user_controller.dart';
 import 'package:eduguard/src/features/personalization/screens/change_name.dart';
 import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_title_card.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:eduguard/src/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +16,7 @@ class UserProfile extends StatelessWidget {
   Widget build(BuildContext context) {
     final userController =UserController.instance;
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       appBar: const CustomAppBar(
         showBackArrow: true,
       ),
