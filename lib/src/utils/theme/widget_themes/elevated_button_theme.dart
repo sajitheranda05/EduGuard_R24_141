@@ -7,10 +7,10 @@ class AppElevatedButtonTheme {
   static final appElevatedButtonTheme =ElevatedButtonThemeData(
     style: ElevatedButton.styleFrom(
       elevation: 0,
-      foregroundColor: AppColors.light,
+      foregroundColor: AppColors.primary,
       backgroundColor: AppColors.primary,
       disabledForegroundColor: AppColors.darkerGrey,
-      disabledBackgroundColor: AppColors.buttonDisabled,
+      disabledBackgroundColor: AppColors.grey,
       side: const BorderSide(color: AppColors.primary),
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
       textStyle: const TextStyle(

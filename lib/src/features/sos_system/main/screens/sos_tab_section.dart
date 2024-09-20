@@ -1,6 +1,7 @@
 import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_controller.dart';
 import 'package:eduguard/src/features/sos_system/sos_state/screens/sos_state.dart';
 import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_user_section.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:eduguard/src/utils/constants/image_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -14,6 +15,7 @@ class SOSTabScreen extends StatelessWidget {
     final contactsController = Get.put(ContactsController());
 
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24.0),

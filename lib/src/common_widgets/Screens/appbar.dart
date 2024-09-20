@@ -1,4 +1,5 @@
 import 'package:eduguard/src/common_widgets/controllers/navigation_drawer_controller.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -57,6 +58,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: title,
       actions: actions,
+      backgroundColor: AppColors.primaryBackground,
     );
   }
 

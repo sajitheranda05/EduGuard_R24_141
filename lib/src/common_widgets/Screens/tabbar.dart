@@ -1,3 +1,4 @@
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 
 class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
@@ -9,9 +10,9 @@ class CustomTabBar extends StatelessWidget implements PreferredSizeWidget{
   Widget build(BuildContext context) {
     return TabBar(
         tabs: tabs,
-        indicatorColor: Colors.black,
-        labelColor: Colors.black,
-        unselectedLabelColor: Colors.grey[600],
+        indicatorColor: AppColors.primary,
+        labelColor: AppColors.primary,
+        unselectedLabelColor: AppColors.textDarkGray,
         indicatorSize:  TabBarIndicatorSize.tab,
     );
   }

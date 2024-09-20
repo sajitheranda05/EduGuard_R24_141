@@ -7,11 +7,9 @@ import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings_t
 import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings_tab_invite.dart';
 import 'package:eduguard/src/features/sos_system/contacts/screens/sos_settings_tab_status.dart';
 import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_title_card.dart';
-import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_display_contact.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../main/screens/sos_edit_settings.dart';
 
 class SOSSettings extends StatelessWidget {
   const SOSSettings({super.key});
@@ -23,6 +21,7 @@ class SOSSettings extends StatelessWidget {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: AppColors.primaryBackground,
         appBar: const CustomAppBar(
           showBackArrow: true,
         ),

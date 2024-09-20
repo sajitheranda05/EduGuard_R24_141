@@ -26,6 +26,7 @@ class _SOSAllChatsScreenState extends State<SOSAllChatsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       body: Obx(() {
 
         if (chatController.loading.value) {

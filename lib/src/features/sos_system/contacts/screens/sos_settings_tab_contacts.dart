@@ -2,6 +2,7 @@ import 'package:eduguard/src/features/sos_system/contacts/controllers/contacts_c
 import 'package:eduguard/src/features/sos_system/contacts/models/contacts_model.dart';
 import 'package:eduguard/src/features/sos_system/contacts/screens/sos_edit_contacts.dart';
 import 'package:eduguard/src/features/sos_system/sos_common_widgets/sos_display_contact.dart';
+import 'package:eduguard/src/utils/constants/color_strings.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -14,6 +15,7 @@ class SOSSettingsTabContacts extends StatelessWidget {
     final ContactsController contactsController =Get.put(ContactsController());
 
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       body: Obx(() {
 
         final highPriorityContact = contactsController.fetchedContacts.firstWhere(

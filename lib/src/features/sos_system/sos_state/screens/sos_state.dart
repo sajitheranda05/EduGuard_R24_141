@@ -22,6 +22,7 @@ class SOSStateScreen extends StatelessWidget {
     final contactsController = Get.find<ContactsController>();
 
     return Scaffold(
+      backgroundColor: AppColors.primaryBackground,
       body: Container(
         margin: const EdgeInsets.all(16.0),
         child: Column(
@@ -66,7 +67,7 @@ class SOSStateScreen extends StatelessWidget {
                                         color: sosStateController
                                                     .secondsRemaining.value <=
                                                 4
-                                            ? Colors.red
+                                            ? AppColors.error
                                             : Colors.black,
                                         fontSize: 15.0,
                                         fontWeight: FontWeight.bold,
@@ -187,7 +188,7 @@ class SOSStateScreen extends StatelessWidget {
                           image: AppImages.userImage,
                           isSelected: isSelected,
                           borderColor: isSelected
-                              ? Colors.green
+                              ? AppColors.primary
                               : Colors.transparent, // Selected border color
                         ),
                       );
@@ -213,8 +214,8 @@ class SOSStateScreen extends StatelessWidget {
                   shape: BoxShape.rectangle,
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
                   border: Border.all(
-                      color: Colors.green,
-                      width: 4.0), // Border around the image
+                      color: AppColors.primary,
+                      width: 4.0),
                 ),
                 child: Column(
                   children: [
