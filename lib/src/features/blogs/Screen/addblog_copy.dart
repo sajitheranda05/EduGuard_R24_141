@@ -94,7 +94,8 @@ class AddBlogCopy extends StatelessWidget {
                   child: ElevatedButton(
                     onPressed: () {
                       if (blogController.blogFormKey.currentState!.validate()) {
-                        blogController.addBlog();
+                        blogController
+                            .addBlog(''); // Passing an empty string for blogID
                       }
                     },
                     child: const Text('Submit Blog'),
